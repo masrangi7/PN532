@@ -1,0 +1,77 @@
+
+Master/ Slave
+
+What does Master/Slave Mean?
+- Master/Slave is a model of communication for hardware devices where one device has a unidirectional
+control over one or more devices
+- one device acts as the controller, whereas the other devices are the ones being controlled
+
+
+i2c communication
+- connect multiple slaves to single master
+- or multiple masters controlling single or multiple slaves
+SDA(serial Data) - the line for master and slave to send and receive data
+SLC(Serial clock) - the line that carries the clock signal
+Note: I2C is a serial communication protocol, so data is transfered bit by bit along a single wire(SDA line)
+
+How I2C works ?
+With I2C data is transferred in messages. Messages are broken up into frames of data
+- Each message has an address frame that contains the binary address of the slave and one or more data frames that contains the data being transmitted
+- Message also contains the start and stop conditions, read/write bits and ACK/NACK bits between each data frame
+
+steps:
+
+1. wakeup method
+ - send any special command/data to wake up pn532
+ -  init parameter value reset = None
+ - call SAM_Configuration() -- put the pn532 back in normal mode
+
+
+
+
+2. wait_ready method
+ ## poll pn532 if status byte is ready, up to timeout seconds
+ - i2c.readinto(status)
+
+3. read_data
+- i2c.readinto method useld
+
+
+4. write_data method
+
+
+
+pyA10Lime module
+## link for a10lime doc
+Link : https://pypi.org/project/pyA10Lime/
+
+i2c.init("/dev/i2c-2")  # Initialize module to use /dev/i2c-2
+i2c.open(0x55)   # the slave device address is 0x55
+
+# if we want to write to some register
+i2c.write([0xAA, 0x20])   # write 0x20 to register 0xAA
+i2c.write([0xAA, 0x10, 0x11, 0x12]) #Do continuous write with start address 0xAA
+
+#If we want to do write and read
+i2c.write([0xAA]) #Set address at 0xAA register
+value = i2c.read(1) #Read 1 byte with start address 0xAA
+
+i2c.close() #End communication with slave device
+
+
+
+####LEARNING PYTHON
+
+bytes()- method returns an immutable bytes object initialized with the given size and data
+
+eg: message = 'Python is fun'
+#convert string to bytes
+byte_message = bytes(message, 'utf-8')
+
+
+bytearray()- this method returns a bytearray object which is an array of the given bytes
+ex:
+prime_numbers= [2,3,5,7]
+
+#convert list to bytearray
+byte_array = bytearray(prime_numbers)
